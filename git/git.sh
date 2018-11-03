@@ -1,7 +1,7 @@
 echo ==============================
 echo install git
 echo ==============================
-apt-get install -y git
+sudo apt-get install -y git
 
 echo ==============================
 echo config git
