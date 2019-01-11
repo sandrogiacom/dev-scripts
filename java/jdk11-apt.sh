@@ -1,7 +1,7 @@
 #login as root
-sudo su
+#sudo su
 apt remove openjdk*
-apt remove java*
+#apt remove java*
 add-apt-repository ppa:openjdk-r/ppa
 apt-get update
 apt install openjdk-11-jdk
