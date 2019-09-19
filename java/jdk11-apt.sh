@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #login as root
 #sudo su
 apt remove openjdk*

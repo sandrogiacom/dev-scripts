@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 echo ==============================
 echo update ubuntu package 
 echo ============================== 

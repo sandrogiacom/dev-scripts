@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 echo ==============================
 echo install maven - run as root
 echo ==============================
