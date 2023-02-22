@@ -2,21 +2,31 @@
 echo ==============================
 echo install docker
 echo ==============================
-apt-get install -y apt-transport-https ca-certificates curl software-properties-common && \
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
-apt-key fingerprint 0EBFCD88 && \
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable" && \
-apt-get update && \
-apt-get install -y docker-ce
+
+sudo apt-get update
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 echo ==============================
 echo add docker root
 echo ==============================
-groupadd docker && \
-usermod -aG docker $USER
+sudo groupadd docker && \
+sudo usermod -aG docker $USER
+newgrp docker
 
-echo ==============================
-echo install docker-compose
-echo ==============================
-curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && \
-chmod +x /usr/local/bin/docker-compose
+
