@@ -1,9 +1,9 @@
-# dev-scripts
+# Dev Scripts
 
-Coleção de scripts para configurar rapidamente um ambiente de desenvolvimento: Git, Docker (Engine, Buildx e Compose v2), AWS CLI v2, Terraform, SDKMAN! e pacotes essenciais para sistemas baseados em Ubuntu/Debian. Alguns scripts também suportam macOS.
+Coleção de scripts para configurar rapidamente um ambiente de desenvolvimento: Git, Docker (Engine, Buildx e Compose v2), AWS CLI v2, Terraform, SDKMAN!, NVM, Zsh + Oh My Zsh e pacotes essenciais para sistemas baseados em Ubuntu/Debian. Alguns scripts também suportam macOS.
 
 ## Sistemas suportados
-- Ubuntu/Debian (com `apt-get`): a maioria dos scripts (linux/ubuntu.sh, docker/docker.sh, docker/docker-compose.sh, git/git.sh, sdkman/sdkman.sh).
+- Ubuntu/Debian (com `apt-get`): a maioria dos scripts (linux/ubuntu.sh, docker/docker.sh, docker/docker-compose.sh, git/git.sh, sdkman/sdkman.sh, zsh/zsh.sh).
 - Linux genérico (com bash, `curl`/`wget`, `unzip` e `sudo`): terraform/terraform.sh e aws/awscli.sh; docker/docker-compose.sh possui fallback via binário do GitHub.
 - macOS: terraform/terraform.sh e aws/awscli.sh (instalação via pkg para AWS CLI); docker/docker-compose.sh tenta instalar o binário do Compose v2 (CLI plugin), mas no macOS normalmente o Docker Desktop já inclui o Compose.
 
@@ -46,6 +46,18 @@ Coleção de scripts para configurar rapidamente um ambiente de desenvolvimento:
   - Ao final, carrega o SDKMAN e imprime a versão (`sdk version`).
   - Suporte: Ubuntu/Debian.
 
+- nvm/nvm.sh
+  - Instala a dependência (curl) via apt e busca a versão mais recente do NVM na API do GitHub.
+  - Cria o diretório base em `$NVM_DIR` (`~/.nvm` por padrão) e executa o instalador oficial do NVM.
+  - Ao final, carrega o NVM e imprime a versão (`nvm --version`).
+  - Suporte: Ubuntu/Debian.
+
+- zsh/zsh.sh
+  - Instala/atualiza o Zsh (e curl/git) via apt e define o Zsh como shell padrão do usuário (`chsh`).
+  - Instala o Oh My Zsh via instalador oficial, sem executar o Zsh ao final e sem sobrescrever um `~/.zshrc` existente.
+  - Idempotente: se `~/.oh-my-zsh` já existir, a instalação é ignorada.
+  - Suporte: Ubuntu/Debian.
+
 ## Pré-requisitos gerais
 - bash, conexão com a internet.
 - Permissão de superusuário (`sudo`) para operações de instalação no sistema.
@@ -65,6 +77,8 @@ Exemplos (Ubuntu/Debian):
 - sudo bash docker/docker-compose.sh
 - bash git/git.sh   # interativo: nome/e-mail e SSH key
 - bash sdkman/sdkman.sh
+- bash nvm/nvm.sh
+- bash zsh/zsh.sh
 
 Exemplos (Linux/macOS):
 - sudo bash aws/awscli.sh
@@ -72,6 +86,7 @@ Exemplos (Linux/macOS):
 
 ## Observações importantes
 - Docker: após ser adicionado ao grupo `docker`, encerre a sessão e entre novamente (ou rode `newgrp docker`) para que a mudança tenha efeito.
+- Zsh: após a instalação, abra um novo terminal (ou rode `source ~/.zshrc`) para carregar o Oh My Zsh.
 - Alguns scripts adicionam repositórios e chaves GPG oficiais (ex.: Docker) e podem alterar arquivos em `/etc/apt`.
 - Os scripts são pensados para serem idempotentes quando possível; rodar novamente deve manter o ambiente atualizado.
 - No macOS, você poderá ser solicitado a informar a senha de administrador para concluir a instalação.

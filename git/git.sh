@@ -30,7 +30,7 @@ echo ==============================
 echo "git name, example: Lord Voldemort"
 read -r gitName
 git config --global user.name "$gitName"  && \
-echo "git email, example: lord.voldemort@fluig.com"
+echo "git email, example: username@email.com"
 read -r gitEmail
 git config --global user.email "$gitEmail"  && \
 git config --global core.precomposeunicode true  && \
