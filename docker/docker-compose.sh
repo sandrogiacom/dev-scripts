@@ -14,18 +14,24 @@ if command -v apt-get >/dev/null 2>&1; then
     gnupg \
     lsb-release
 
+  # Detect the distribution (Ubuntu vs Debian) using /etc/os-release
+  DISTRO_ID="$(. /etc/os-release && echo "${ID:-ubuntu}")"
+  case "$DISTRO_ID" in
+    debian) DOCKER_REPO="debian" ;;
+    *) DOCKER_REPO="ubuntu" ;;
+  esac
+  CODENAME="$(. /etc/os-release && echo "${VERSION_CODENAME:-${UBUNTU_CODENAME:-$(lsb_release -cs)}}")"
+  ARCH="$(dpkg --print-architecture)"
+  echo "Using distro: $DISTRO_ID ($DOCKER_REPO), codename: $CODENAME, arch: $ARCH"
+
   # Ensure Docker's official GPG key and repository are configured
   sudo install -m 0755 -d /etc/apt/keyrings
   if [ ! -f /etc/apt/keyrings/docker.gpg ]; then
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || true
+    curl -fsSL "https://download.docker.com/linux/${DOCKER_REPO}/gpg" | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || true
   fi
   sudo chmod a+r /etc/apt/keyrings/docker.gpg || true
 
-  UBUNTU_CODENAME="$(. /etc/os-release && echo "${UBUNTU_CODENAME:-$(lsb_release -cs)}")"
-  ARCH="$(dpkg --print-architecture)"
-  echo "Using Ubuntu codename: $UBUNTU_CODENAME, arch: $ARCH"
-
-  echo "deb [arch=${ARCH} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} stable" | \
+  echo "deb [arch=${ARCH} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${DOCKER_REPO} ${CODENAME} stable" | \
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || true
 
   sudo apt-get update

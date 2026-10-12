@@ -22,12 +22,17 @@ sudo apt-get install -y \
   gnupg \
   lsb-release \
   build-essential \
+  unzip \
+  zip \
   locales
+
+# Locale padrão (pode ser sobrescrito via variável de ambiente)
+TARGET_LOCALE="${LOCALE:-pt_BR.UTF-8}"
 
 # Gera locales comuns (não falha se indisponível)
 if command -v locale-gen >/dev/null 2>&1; then
-  sudo locale-gen pt_BR.UTF-8 en_US.UTF-8 || true
-  sudo update-locale LANG=pt_BR.UTF-8 || true
+  sudo locale-gen "$TARGET_LOCALE" en_US.UTF-8 || true
+  sudo update-locale LANG="$TARGET_LOCALE" || true
 fi
 
 echo ==============================

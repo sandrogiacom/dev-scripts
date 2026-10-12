@@ -40,7 +40,14 @@ echo ==============================
 echo git ssh key
 echo ==============================
 if [ -n "${gitEmail:-}" ]; then
-  ssh-keygen -t rsa -C "$gitEmail"
+  KEY_FILE="${HOME}/.ssh/id_ed25519"
+  if [ -f "$KEY_FILE" ]; then
+    echo "SSH key already exists at $KEY_FILE. Skipping."
+  else
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+    ssh-keygen -t ed25519 -C "$gitEmail" -f "$KEY_FILE"
+  fi
 else
   echo "Skipping SSH key generation because email was not provided."
 fi

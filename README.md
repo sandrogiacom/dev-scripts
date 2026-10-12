@@ -9,13 +9,13 @@ Coleção de scripts para configurar rapidamente um ambiente de desenvolvimento:
 
 ## Estrutura do projeto e o que cada script faz
 - linux/ubuntu.sh
-  - Atualiza índices do apt e instala pacotes essenciais (curl, wget, ca-certificates, gnupg, lsb-release, build-essential, locales, etc.).
-  - Gera locales comuns e define LANG; seguro para rodar várias vezes.
+  - Atualiza índices do apt e instala pacotes essenciais (curl, wget, ca-certificates, gnupg, lsb-release, build-essential, unzip, zip, locales, etc.).
+  - Gera locales comuns e define LANG (padrão `pt_BR.UTF-8`, ajustável pela variável `LOCALE`); seguro para rodar várias vezes.
   - Suporte: Ubuntu/Debian.
 
 - git/git.sh
   - Instala ou atualiza o Git via apt e valida a instalação.
-  - Pede interativamente nome e e-mail para `git config --global` e oferece geração de chave SSH (rsa) com o e-mail informado.
+  - Pede interativamente nome e e-mail para `git config --global` e oferece geração de chave SSH (ed25519) com o e-mail informado (ignorada se a chave já existir em `~/.ssh/id_ed25519`).
   - Suporte: Ubuntu/Debian.
 
 - docker/docker.sh
@@ -25,7 +25,7 @@ Coleção de scripts para configurar rapidamente um ambiente de desenvolvimento:
 
 - docker/docker-compose.sh
   - Instala/atualiza o Docker Compose v2.
-  - Caminho 1 (Ubuntu/Debian): usa apt e o repositório oficial da Docker.
+  - Caminho 1 (Ubuntu/Debian): detecta a distribuição via `/etc/os-release` e usa apt com o repositório oficial da Docker correspondente (ubuntu ou debian).
   - Caminho 2 (sem apt): baixa a última versão do GitHub Releases e instala como CLI plugin em `/usr/local/lib/docker/cli-plugins` (cria um shim `docker-compose` se necessário).
   - Suporte: Ubuntu/Debian (apt) e fallback para Linux/macOS via binário.
 
@@ -43,6 +43,7 @@ Coleção de scripts para configurar rapidamente um ambiente de desenvolvimento:
 
 - sdkman/sdkman.sh
   - Instala dependências (curl, unzip, zip) via apt e executa a instalação do SDKMAN!.
+  - Idempotente: se `~/.sdkman` já existir, a instalação é ignorada.
   - Ao final, carrega o SDKMAN e imprime a versão (`sdk version`).
   - Suporte: Ubuntu/Debian.
 
@@ -62,7 +63,7 @@ Coleção de scripts para configurar rapidamente um ambiente de desenvolvimento:
 - bash, conexão com a internet.
 - Permissão de superusuário (`sudo`) para operações de instalação no sistema.
 - Para scripts baseados em apt: um sistema Ubuntu/Debian com `apt-get`.
-- Para Terraform e AWS CLI no Linux: `unzip` instalado (o script aborta com uma mensagem se estiver ausente).
+- Para Terraform e AWS CLI no Linux: `unzip` instalado (o `linux/ubuntu.sh` já o instala; os scripts abortam com uma mensagem se estiver ausente).
 - `curl` ou `wget` (os scripts tentam usar um dos dois quando necessário).
 
 ## Como executar
